@@ -122,6 +122,16 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+  function deleteData(index) {
+  if (confirm("Yakin ingin menghapus data ini?")) {
+    dataList.splice(index, 1);     // hapus dari array
+    saveToLocal();                 // simpan ulang ke localStorage
+    renderTable();                 // tampilkan ulang tabel
+  }
+}
+
+
   const form = document.getElementById("dataForm");
   const tableBody = document.querySelector("#dataTable tbody");
   const editForm = document.getElementById("editForm");
@@ -154,17 +164,21 @@
         : item.tracking;
 
       const row = `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${item.noID}</td>
-          <td>${item.nama}</td>
-          <td>${item.alamat}</td>
-          <td>${item.noHP}</td>
-          <td>${item.paket}</td>
-          <td>${trackingLink}</td>
-          <td><button class="btn btn-warning btn-sm" onclick="openEditModal(${index})">Edit</button></td>
-        </tr>
-      `;
+  <tr>
+    <td>${index + 1}</td>
+    <td>${item.noID}</td>
+    <td>${item.nama}</td>
+    <td>${item.alamat}</td>
+    <td>${item.noHP}</td>
+    <td>${item.paket}</td>
+    <td>${trackingLink}</td>
+    <td>
+      <button class="btn btn-warning btn-sm me-1" onclick="openEditModal(${index})">Edit</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteData(${index})">Hapus</button>
+    </td>
+  </tr>
+`;
+
       tableBody.insertAdjacentHTML("beforeend", row);
     });
   }
