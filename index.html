@@ -129,21 +129,22 @@
   let dataList = [];
 
   form.addEventListener("submit", function (e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = {
-      noID: document.getElementById("noID").value,
-      nama: document.getElementById("nama").value,
-      alamat: document.getElementById("alamat").value,
-      noHP: document.getElementById("noHP").value,
-      paket: document.getElementById("paket").value,
-      tracking: document.getElementById("tracking").value
-    };
+  const data = {
+    noID: document.getElementById("noID").value,
+    nama: document.getElementById("nama").value,
+    alamat: document.getElementById("alamat").value,
+    noHP: document.getElementById("noHP").value,
+    paket: document.getElementById("paket").value,
+    tracking: document.getElementById("tracking").value
+  };
 
-    dataList.push(data);
-    renderTable();
-    form.reset();
-  });
+  dataList.push(data);
+  saveToLocal();
+  renderTable();
+  form.reset();
+});
 
   function renderTable() {
     tableBody.innerHTML = "";
@@ -184,27 +185,44 @@
   }
 
   editForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const index = document.getElementById("editIndex").value;
-    dataList[index] = {
-      noID: document.getElementById("editNoID").value,
-      nama: document.getElementById("editNama").value,
-      alamat: document.getElementById("editAlamat").value,
-      noHP: document.getElementById("editNoHP").value,
-      paket: document.getElementById("editPaket").value,
-      tracking: document.getElementById("editTracking").value
-    };
+  const index = document.getElementById("editIndex").value;
+  dataList[index] = {
+    noID: document.getElementById("editNoID").value,
+    nama: document.getElementById("editNama").value,
+    alamat: document.getElementById("editAlamat").value,
+    noHP: document.getElementById("editNoHP").value,
+    paket: document.getElementById("editPaket").value,
+    tracking: document.getElementById("editTracking").value
+  };
 
+  saveToLocal();
+  renderTable();
+  editModal.hide();
+});
+
+function saveToLocal() {
+  localStorage.setItem("dataPelanggan", JSON.stringify(dataList));
+}
+
+function loadFromLocal() {
+  const data = localStorage.getItem("dataPelanggan");
+  if (data) {
+    dataList = JSON.parse(data);
     renderTable();
-    editModal.hide();
-  });
+  }
+}
+
 
   function exportToExcel() {
     const table = document.getElementById("dataTable");
     const wb = XLSX.utils.table_to_book(table, { sheet: "Data Pelanggan" });
     XLSX.writeFile(wb, "Data_Pelanggan.xlsx");
   }
+
+  loadFromLocal();
+
 </script>
 </body>
 </html>
